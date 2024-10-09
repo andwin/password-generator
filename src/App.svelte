@@ -34,6 +34,48 @@
     setTimeout(() => animatePasswordBorder = false, 300)
   }
 
+  const loadSettings = () => {
+    const settings = localStorage.getItem('settings')
+    if (!settings) return resestSettings()
+
+    const parsedSettings = JSON.parse(settings)
+    includeUppercase = parsedSettings.includeUppercase
+    includeLowercase = parsedSettings.includeLowercase
+    includeNumbers = parsedSettings.includeNumbers
+    includeSymbols = parsedSettings.includeSymbols
+    length = parsedSettings.length
+
+    console.log('length', length)
+
+  }
+
+  const saveSettings = () => {
+    const settings = {
+      includeUppercase,
+      includeLowercase,
+      includeNumbers,
+      includeSymbols,
+      length
+    }
+    localStorage.setItem('settings', JSON.stringify(settings))
+  }
+
+  const resestSettings = () => {
+    includeUppercase = true
+    includeLowercase = true
+    includeNumbers = true
+    includeSymbols = true
+    length = 25
+    saveSettings()
+    generatePassword()
+  }
+
+  const generatePasswordAndSaveSettings = () => {
+    generatePassword()
+    saveSettings()
+  }
+
+  loadSettings()
   generatePassword()
 </script>
 
@@ -52,22 +94,26 @@
 
     <div class="length">
       <label for="length">Password length</label>
-      <input type="text" name="length" bind:value={length} on:input={generatePassword} />
-      <input type="range" min="1" max="50" bind:value={length} on:change={generatePassword} class="slider" id="length-slider">
+      <input type="text" name="length" bind:value={length} on:input={generatePasswordAndSaveSettings} />
+      <input type="range" min="1" max="50" bind:value={length} on:change={generatePasswordAndSaveSettings} class="slider" id="length-slider">
     </div>
 
     <div class="settings">
-      <input type="checkbox" name="uppercase" id="uppercase" bind:checked={includeUppercase} on:change={generatePassword} />
+      <input type="checkbox" name="uppercase" id="uppercase" bind:checked={includeUppercase} on:change={generatePasswordAndSaveSettings} />
       <label for="uppercase">Uppercase</label>
 
-      <input type="checkbox" name="lowercase" id="lowercase" bind:checked={includeLowercase} on:change={generatePassword} />
+      <input type="checkbox" name="lowercase" id="lowercase" bind:checked={includeLowercase} on:change={generatePasswordAndSaveSettings} />
       <label for="lowercase">Lowercase</label>
 
-      <input type="checkbox" name="numbers" id="numbers" bind:checked={includeNumbers} on:change={generatePassword} />
+      <input type="checkbox" name="numbers" id="numbers" bind:checked={includeNumbers} on:change={generatePasswordAndSaveSettings} />
       <label for="numbers">Numbers</label>
 
-      <input type="checkbox" name="symbols" id="symbols" bind:checked={includeSymbols} on:change={generatePassword} />
+      <input type="checkbox" name="symbols" id="symbols" bind:checked={includeSymbols} on:change={generatePasswordAndSaveSettings} />
       <label for="symbols">Symbols</label>
+    </div>
+
+    <div class="settings">
+      <button type="button" on:click={resestSettings} class="reset-settings-btn">Reset settings</button>
     </div>
   </form>
 </main>
@@ -99,6 +145,13 @@
 
   .buttons {
     margin-bottom: 32px;
+  }
+
+  .reset-settings-btn {
+    margin-top: 25px;
+    font-size: 0.7em;
+    background-color: #5c5c5c;
+    padding: 0.5em 1em;
   }
 
   .length {
