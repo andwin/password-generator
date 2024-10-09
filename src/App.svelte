@@ -4,12 +4,12 @@
   const numberChars = "0123456789"
   const symbolChars = "!@#$%^&*()_+~`|}{[]:;?><,./-="
 
-  let includeUppercase = true
-  let includeLowercase = true
-  let includeNumbers = true
-  let includeSymbols = true
+  let includeUppercase: boolean
+  let includeLowercase: boolean
+  let includeNumbers: boolean
+  let includeSymbols: boolean
 
-  let length = 25
+  let length: number
   let password: string;
 
   let animatePasswordBorder = false;
