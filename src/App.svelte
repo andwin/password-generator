@@ -12,6 +12,8 @@
   let length = 25
   let password: string;
 
+  let animatePasswordBorder = false;
+
   const generatePassword = () => {
     let chars = ''
     if (includeUppercase) chars += uppercaseChars
@@ -28,6 +30,8 @@
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(password);
+    animatePasswordBorder = true
+    setTimeout(() => animatePasswordBorder = false, 300)
   }
 
   generatePassword()
@@ -38,7 +42,7 @@
 
   <form>
     <div class="password">
-      <input type="text" name="password" id="password" value={password} />
+      <input type="text" name="password" id="password" value={password} class="{animatePasswordBorder ? 'animate-password-border' : ''}" />
     </div>
 
     <div class="buttons">
@@ -86,6 +90,11 @@
     margin-bottom: 24px;
     border-radius: 3px;
     width: 100%;
+  }
+
+  .animate-password-border {
+    transition: border 0.1s ease-in-out;
+    border: 2px solid #007bff;
   }
 
   .buttons {
